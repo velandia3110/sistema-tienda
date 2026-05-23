@@ -1,0 +1,514 @@
+{
+  "openapi": "3.0.0",
+  "info": {
+    "title": "Sistema de Tienda API",
+    "version": "1.0.0",
+    "description": "Documentación de la API de la Tienda de Productos con arquitectura por capas modular y soporte Prisma + MySQL."
+  },
+  "servers": [
+    {
+      "url": "http://localhost:3000",
+      "description": "Servidor de Desarrollo Local"
+    }
+  ],
+  "paths": {
+    "/api/categorias": {
+      "get": {
+        "summary": "Obtener todas las categorías",
+        "tags": ["Categorías"],
+        "responses": {
+          "200": {
+            "description": "Lista de categorías obtenida con éxito"
+          }
+        }
+      }
+    },
+    "/api/categorias/{id}": {
+      "get": {
+        "summary": "Obtener categoría por ID",
+        "tags": ["Categorías"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Detalle de la categoría"
+          },
+          "404": {
+            "description": "Categoría no encontrada"
+          }
+        }
+      }
+    },
+    "/api/clientes": {
+      "get": {
+        "summary": "Listar todos los clientes",
+        "tags": ["Clientes"],
+        "responses": {
+          "200": {
+            "description": "Lista de clientes"
+          }
+        }
+      },
+      "post": {
+        "summary": "Registrar un nuevo cliente",
+        "tags": ["Clientes"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["cedula", "nombre", "apellido", "telefono", "correo"],
+                "properties": {
+                  "cedula": { "type": "string", "example": "100223344" },
+                  "nombre": { "type": "string", "example": "Carlos" },
+                  "apellido": { "type": "string", "example": "Gómez" },
+                  "telefono": { "type": "string", "example": "3104445566" },
+                  "correo": { "type": "string", "format": "email", "example": "carlos@email.com" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Cliente creado correctamente"
+          },
+          "400": {
+            "description": "Datos de entrada no válidos o cédula duplicada"
+          }
+        }
+      }
+    },
+    "/api/clientes/{id}": {
+      "get": {
+        "summary": "Obtener cliente por ID",
+        "tags": ["Clientes"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Datos del cliente" },
+          "404": { "description": "Cliente no encontrado" }
+        }
+      },
+      "put": {
+        "summary": "Actualizar cliente por ID",
+        "tags": ["Clientes"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "cedula": { "type": "string" },
+                  "nombre": { "type": "string" },
+                  "apellido": { "type": "string" },
+                  "telefono": { "type": "string" },
+                  "correo": { "type": "string", "format": "email" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Cliente actualizado correctamente" },
+          "400": { "description": "Cédula ya registrada por otro cliente" },
+          "404": { "description": "Cliente no encontrado" }
+        }
+      },
+      "delete": {
+        "summary": "Eliminar cliente por ID",
+        "tags": ["Clientes"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Cliente eliminado correctamente" },
+          "404": { "description": "Cliente no encontrado" }
+        }
+      }
+    },
+    "/api/proveedores": {
+      "get": {
+        "summary": "Listar todos los proveedores",
+        "tags": ["Proveedores"],
+        "responses": {
+          "200": { "description": "Lista de proveedores" }
+        }
+      },
+      "post": {
+        "summary": "Crear un nuevo proveedor",
+        "tags": ["Proveedores"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["nombre", "telefono", "ciudad"],
+                "properties": {
+                  "nombre": { "type": "string", "example": "Distribuidora del Norte" },
+                  "telefono": { "type": "string", "example": "6015551234" },
+                  "ciudad": { "type": "string", "example": "Bogotá" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Proveedor creado" }
+        }
+      }
+    },
+    "/api/proveedores/{id}": {
+      "get": {
+        "summary": "Obtener proveedor por ID",
+        "tags": ["Proveedores"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Datos del proveedor" }
+        }
+      },
+      "put": {
+        "summary": "Actualizar proveedor por ID",
+        "tags": ["Proveedores"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "nombre": { "type": "string" },
+                  "telefono": { "type": "string" },
+                  "ciudad": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Proveedor actualizado" }
+        }
+      },
+      "delete": {
+        "summary": "Eliminar proveedor por ID",
+        "tags": ["Proveedores"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Proveedor eliminado correctamente" }
+        }
+      }
+    },
+    "/api/productos": {
+      "get": {
+        "summary": "Listar todos los productos con alertas de stock",
+        "tags": ["Productos"],
+        "responses": {
+          "200": { "description": "Lista de productos con campo 'alerta' si stock <= 5" }
+        }
+      },
+      "post": {
+        "summary": "Crear un nuevo producto",
+        "tags": ["Productos"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["codigo", "nombre", "peso", "cantidadAlmacenada", "tipoEmpaque", "precioUnitario", "categoriaId"],
+                "properties": {
+                  "codigo": { "type": "string", "example": "PAP-001" },
+                  "nombre": { "type": "string", "example": "Resma Papel Carta" },
+                  "peso": { "type": "number", "example": 2.5 },
+                  "cantidadAlmacenada": { "type": "integer", "example": 25 },
+                  "tipoEmpaque": { "type": "string", "enum": ["cartón", "plástico", "otro"], "example": "cartón" },
+                  "precioUnitario": { "type": "number", "example": 15000.00 },
+                  "categoriaId": { "type": "integer", "example": 1 },
+                  "proveedorIds": {
+                    "type": "array",
+                    "items": { "type": "integer" },
+                    "example": [1]
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Producto creado" }
+        }
+      }
+    },
+    "/api/productos/{id}": {
+      "get": {
+        "summary": "Obtener producto por ID",
+        "tags": ["Productos"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Datos del producto con campo de alerta de stock" }
+        }
+      },
+      "put": {
+        "summary": "Actualizar producto por ID",
+        "tags": ["Productos"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "codigo": { "type": "string" },
+                  "nombre": { "type": "string" },
+                  "peso": { "type": "number" },
+                  "cantidadAlmacenada": { "type": "integer" },
+                  "tipoEmpaque": { "type": "string", "enum": ["cartón", "plástico", "otro"] },
+                  "precioUnitario": { "type": "number" },
+                  "categoriaId": { "type": "integer" },
+                  "proveedorIds": { "type": "array", "items": { "type": "integer" } }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Producto actualizado" }
+        }
+      },
+      "delete": {
+        "summary": "Eliminar producto por ID",
+        "tags": ["Productos"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Producto eliminado" }
+        }
+      }
+    },
+    "/api/ventas": {
+      "get": {
+        "summary": "Listar todas las ventas",
+        "tags": ["Ventas"],
+        "responses": {
+          "200": { "description": "Lista de ventas registradas" }
+        }
+      },
+      "post": {
+        "summary": "Registrar una venta a un cliente (Calcula impuestos y valida/descuenta stock)",
+        "tags": ["Ventas"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["clienteId", "productos"],
+                "properties": {
+                  "clienteId": { "type": "integer", "example": 1 },
+                  "productos": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": ["productoId", "cantidad"],
+                      "properties": {
+                        "productoId": { "type": "integer", "example": 1 },
+                        "cantidad": { "type": "integer", "example": 3 }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Venta realizada. Retorna resumen detallado (cliente, productos, cantidades, subtotal, impuestos, total)"
+          },
+          "400": {
+            "description": "Stock insuficiente para algún producto o datos inválidos"
+          }
+        }
+      }
+    },
+    "/api/ventas/{id}": {
+      "get": {
+        "summary": "Obtener resumen de venta por ID",
+        "tags": ["Ventas"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Resumen detallado de la venta" }
+        }
+      }
+    },
+    "/api/compras": {
+      "get": {
+        "summary": "Listar todas las compras a proveedores",
+        "tags": ["Compras Proveedores"],
+        "responses": {
+          "200": { "description": "Lista de compras registradas" }
+        }
+      },
+      "post": {
+        "summary": "Registrar compra a proveedor (Aumenta stock de productos)",
+        "tags": ["Compras Proveedores"],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["proveedorId", "productos"],
+                "properties": {
+                  "proveedorId": { "type": "integer", "example": 1 },
+                  "productos": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": ["productoId", "cantidad", "precioUnitario"],
+                      "properties": {
+                        "productoId": { "type": "integer", "example": 1 },
+                        "cantidad": { "type": "integer", "example": 10 },
+                        "precioUnitario": { "type": "number", "example": 9500.00 }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Compra registrada y stock actualizado" }
+        }
+      }
+    },
+    "/api/compras/{id}": {
+      "get": {
+        "summary": "Obtener resumen de compra por ID",
+        "tags": ["Compras Proveedores"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Resumen de la compra" }
+        }
+      }
+    },
+    "/api/reportes/clientes-mas-compras": {
+      "get": {
+        "summary": "Clientes con más compras y total gastado",
+        "description": "Retorna el listado de clientes ordenados descendentemente por el monto total que han gastado.",
+        "tags": ["Reportes"],
+        "responses": {
+          "200": { "description": "Reporte obtenido" }
+        }
+      }
+    },
+    "/api/reportes/clientes-compra-unica": {
+      "get": {
+        "summary": "Clientes que compraron solo una vez",
+        "description": "Retorna el listado de clientes que registran exactamente una sola venta en el sistema.",
+        "tags": ["Reportes"],
+        "responses": {
+          "200": { "description": "Reporte obtenido" }
+        }
+      }
+    },
+    "/api/reportes/cliente-mas-frecuente": {
+      "get": {
+        "summary": "Cliente más frecuente",
+        "description": "Retorna los datos del cliente que ha realizado el mayor número de compras en la tienda.",
+        "tags": ["Reportes"],
+        "responses": {
+          "200": { "description": "Cliente más recurrente" }
+        }
+      }
+    }
+  }
+}
