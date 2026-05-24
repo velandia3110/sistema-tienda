@@ -24,6 +24,9 @@ export class ProductosRepository {
 
   async findAll() {
     return prisma.producto.findMany({
+      where: {
+        activo: true
+      },
       include: {
         categoria: true,
         proveedores: {
@@ -34,8 +37,11 @@ export class ProductosRepository {
   }
 
   async findById(id) {
-    return prisma.producto.findUnique({
-      where: { id: Number(id) },
+    return prisma.producto.findFirst({
+      where: {
+        id: Number(id),
+        activo: true
+      },
       include: {
         categoria: true,
         proveedores: {
@@ -86,9 +92,14 @@ export class ProductosRepository {
     });
   }
 
+
   async delete(id) {
-    return prisma.producto.delete({
-      where: { id: Number(id) }
+    return await prisma.producto.update({
+      where: { id: Number(id) },
+      data: {
+        activo: false,
+        eliminadoEn: new Date()
+      }
     });
   }
 }

@@ -11,9 +11,10 @@ export class ReportesController {
           typeof value === 'bigint' ? Number(value) : value
         )
       );
-
-      res.json({ success: true, data: safeData });
-      res.json({ success: true, data });
+      return res.json({
+        success: true,
+        data: safeData
+      });
     } catch (error) {
       next(error);
     }
@@ -27,9 +28,10 @@ export class ReportesController {
           typeof value === 'bigint' ? Number(value) : value
         )
       );
-
-      res.json({ success: true, data: safeData });
-      res.json({ success: true, data });
+      return res.json({
+        success: true,
+        data: safeData
+      });
     } catch (error) {
       next(error);
     }
@@ -38,16 +40,23 @@ export class ReportesController {
   async getClienteMasFrecuente(req, res, next) {
     try {
       const data = await service.getClienteMasFrecuente();
+
       const safeData = JSON.parse(
-        JSON.stringify(data, (_, value) =>
-          typeof value === 'bigint' ? Number(value) : value
+        JSON.stringify(
+          data,
+          (_, value) =>
+            typeof value === 'bigint'
+              ? Number(value)
+              : value
         )
       );
+      return res.json({
+        success: true,
+        data: safeData
+      });
 
-      res.json({ success: true, data: safeData });
-      res.json({ success: true, data });
     } catch (error) {
-      next(error);
+      return next(error);
     }
   }
 }

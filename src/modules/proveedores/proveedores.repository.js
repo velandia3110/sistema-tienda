@@ -6,12 +6,35 @@ export class ProveedoresRepository {
   }
 
   async findAll() {
-    return prisma.proveedor.findMany();
-  }
+    return prisma.proveedor.findMany({
+      include: {
+        productos: {
+          include: {
+            producto: {
+            select: {
+              id:     true,
+              nombre: true,
+              codigo: true,
+            }
+          }
+        }
+      }
+    },
+    orderBy: { nombre: 'asc' },
+  });  }
 
   async findById(id) {
     return prisma.proveedor.findUnique({
-      where: { id: Number(id) }
+      where: { id: Number(id) },
+      include: {
+        producto: {
+          select: {
+            id: true,
+            nombre: true,
+            codigo: true,
+          }
+        }
+      }
     });
   }
 

@@ -10,7 +10,7 @@ generator client {
 model Categoria {
   id        Int        @id @default(autoincrement())
   nombre    String     @unique
-  impuesto  Decimal    @db.Decimal(5, 4) // Ej. 0.0700 para 7%
+  impuesto  Decimal    @db.Decimal(5, 4)
   productos Producto[]
 }
 
@@ -20,13 +20,15 @@ model Producto {
   nombre             String
   peso               Decimal                  @db.Decimal(10, 2)
   cantidadAlmacenada Int
-  tipoEmpaque        String // cartón, plástico, otro
+  tipoEmpaque        String                   // cartón, plástico, otro
   precioUnitario     Decimal                  @db.Decimal(10, 2)
   categoriaId        Int
   categoria          Categoria                @relation(fields: [categoriaId], references: [id])
   proveedores        ProductoProveedor[]
   detallesVenta      DetalleVenta[]
   detallesCompra     DetalleCompraProveedor[]
+  activo             Boolean                  @default(true)
+  eliminadoEn        DateTime?
 }
 
 model Proveedor {
