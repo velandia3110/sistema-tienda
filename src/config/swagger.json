@@ -358,6 +358,49 @@
         }
       }
     },
+    "/api/productos/{id}/imagen": {
+      "patch": {
+        "summary": "Subir o actualizar la imagen de un producto",
+        "tags": ["Productos"],
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "multipart/form-data": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "imagen": {
+                    "type": "string",
+                    "format": "binary",
+                    "description": "Archivo de imagen a subir (JPEG, PNG, WebP, JPG)"
+                  }
+                },
+                "required": ["imagen"]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Imagen de producto actualizada correctamente"
+          },
+          "400": {
+            "description": "Archivo inválido o tamaño de archivo excedido (Límite 5MB)"
+          },
+          "404": {
+            "description": "Producto no encontrado"
+          }
+        }
+      }
+    },
     "/api/ventas": {
       "get": {
         "summary": "Listar todas las ventas",

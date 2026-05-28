@@ -1,5 +1,11 @@
+import fs from 'fs';
+import path from 'path';
+import { fileURLToPath } from 'url';
 import { ProductosRepository } from './productos.repository.js';
 import { obtenerAlertaStock } from '../../utils/stock.js';
+
+const __filename = fileURLToPath(import.meta.url);
+const __dirname = path.dirname(__filename);
 
 const repository = new ProductosRepository();
 
@@ -19,6 +25,7 @@ export class ProductosService {
       cantidadAlmacenada: product.cantidadAlmacenada,
       tipoEmpaque: product.tipoEmpaque,
       precioUnitario: Number(product.precioUnitario),
+      imagenUrl: product.imagenUrl,
       categoria: product.categoria,
       proveedores,
       alerta: obtenerAlertaStock(product.cantidadAlmacenada)
@@ -62,6 +69,25 @@ export class ProductosService {
       }
     }
     const prod = await repository.update(id, data, proveedorIds);
+    return this.formatProduct(prod);
+  }
+
+  async updateImagen(id, imagenUrl) {
+    const producto = await this.getProductoById(id);
+    
+    if (producto.imagenUrl) {
+      const relativePath = producto.imagenUrl;
+      const absolutePath = path.join(__dirname, '../../../', relativePath);
+      try {
+        if (fs.existsSync(absolutePath)) {
+          fs.unlinkSync(absolutePath);
+        }
+      } catch (err) {
+        console.error(`Error al eliminar la imagen anterior: ${err.message}`);
+      }
+    }
+
+    const prod = await repository.update(id, { imagenUrl });
     return this.formatProduct(prod);
   }
 

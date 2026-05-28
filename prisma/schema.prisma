@@ -27,6 +27,7 @@ model Producto {
   proveedores        ProductoProveedor[]
   detallesVenta      DetalleVenta[]
   detallesCompra     DetalleCompraProveedor[]
+  imagenUrl          String?                  @db.VarChar(255)
   activo             Boolean                  @default(true)
   eliminadoEn        DateTime?
 }

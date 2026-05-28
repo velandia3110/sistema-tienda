@@ -43,6 +43,23 @@ export class ProductosController {
     }
   }
 
+  async uploadImagen(req, res, next) {
+    try {
+      const { id } = req.params;
+      if (!req.file) {
+        const error = new Error('Por favor, suba un archivo de imagen válido.');
+        error.statusCode = 400;
+        throw error;
+      }
+      
+      const imagenUrl = `/uploads/${req.file.filename}`;
+      const productoActualizado = await service.updateImagen(id, imagenUrl);
+      res.json({ success: true, data: productoActualizado });
+    } catch (error) {
+      next(error);
+    }
+  }
+
   async deleteProducto(req, res, next) {
     try {
       const { id } = req.params;

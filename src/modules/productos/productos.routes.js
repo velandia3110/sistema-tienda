@@ -1,6 +1,7 @@
 import { Router } from 'express';
 import { ProductosController } from './productos.controller.js';
 import { validateBody } from '../../middlewares/validator.middleware.js';
+import { uploadImage } from '../../middlewares/upload.middleware.js';
 
 const router = Router();
 const controller = new ProductosController();
@@ -31,6 +32,7 @@ router.post('/', validateBody(productoSchema), controller.createProducto);
 router.get('/', controller.getProductos);
 router.get('/:id', controller.getProductoById);
 router.put('/:id', validateBody(updateProductoSchema), controller.updateProducto);
+router.patch('/:id/imagen', uploadImage.single('imagen'), controller.uploadImagen);
 router.delete('/:id', controller.deleteProducto);
 
 export default router;

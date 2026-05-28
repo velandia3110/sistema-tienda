@@ -320,6 +320,29 @@
             }
           },
           "response": []
+        },
+        {
+          "name": "Subir Imagen de Producto",
+          "request": {
+            "method": "PATCH",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "imagen",
+                  "type": "file",
+                  "src": []
+                }
+              ]
+            },
+            "url": {
+              "raw": "{{base_url}}/api/productos/1/imagen",
+              "host": ["{{base_url}}"],
+              "path": ["api", "productos", "1", "imagen"]
+            }
+          },
+          "response": []
         }
       ]
     },
