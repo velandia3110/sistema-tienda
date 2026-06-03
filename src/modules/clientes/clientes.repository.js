@@ -6,18 +6,20 @@ export class ClientesRepository {
   }
 
   async findAll() {
-    return prisma.cliente.findMany();
+    return prisma.cliente.findMany({
+      where: { activo: true }
+    });
   }
 
   async findById(id) {
-    return prisma.cliente.findUnique({
-      where: { id: Number(id) }
+    return prisma.cliente.findFirst({
+      where: { id: Number(id), activo: true }
     });
   }
 
   async findByCedula(cedula) {
-    return prisma.cliente.findUnique({
-      where: { cedula }
+    return prisma.cliente.findFirst({
+      where: { cedula, activo: true }
     });
   }
 
@@ -29,8 +31,12 @@ export class ClientesRepository {
   }
 
   async delete(id) {
-    return prisma.cliente.delete({
-      where: { id: Number(id) }
+    return prisma.cliente.update({
+      where: { id: Number(id) },
+      data: {
+        activo: false,
+        eliminadoEn: new Date()
+      }
     });
   }
 }

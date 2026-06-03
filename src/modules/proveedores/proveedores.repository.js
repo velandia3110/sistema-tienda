@@ -7,31 +7,37 @@ export class ProveedoresRepository {
 
   async findAll() {
     return prisma.proveedor.findMany({
+      where: { activo: true },
       include: {
         productos: {
           include: {
             producto: {
-            select: {
-              id:     true,
-              nombre: true,
-              codigo: true,
+              select: {
+                id:     true,
+                nombre: true,
+                codigo: true,
+              }
             }
           }
         }
-      }
-    },
-    orderBy: { nombre: 'asc' },
-  });  }
+      },
+      orderBy: { nombre: 'asc' },
+    });
+  }
 
   async findById(id) {
-    return prisma.proveedor.findUnique({
-      where: { id: Number(id) },
+    return prisma.proveedor.findFirst({
+      where: { id: Number(id), activo: true },
       include: {
-        producto: {
-          select: {
-            id: true,
-            nombre: true,
-            codigo: true,
+        productos: {
+          include: {
+            producto: {
+              select: {
+                id: true,
+                nombre: true,
+                codigo: true,
+              }
+            }
           }
         }
       }
@@ -46,8 +52,12 @@ export class ProveedoresRepository {
   }
 
   async delete(id) {
-    return prisma.proveedor.delete({
-      where: { id: Number(id) }
+    return prisma.proveedor.update({
+      where: { id: Number(id) },
+      data: {
+        activo: false,
+        eliminadoEn: new Date()
+      }
     });
   }
 }

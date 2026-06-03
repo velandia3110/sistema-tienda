@@ -33,12 +33,14 @@ model Producto {
 }
 
 model Proveedor {
-  id        Int                 @id @default(autoincrement())
-  nombre    String
-  telefono  String
-  ciudad    String
-  productos ProductoProveedor[]
-  compras   CompraProveedor[]
+  id          Int                 @id @default(autoincrement())
+  nombre      String
+  telefono    String
+  ciudad      String
+  activo      Boolean             @default(true)
+  eliminadoEn DateTime?
+  productos   ProductoProveedor[]
+  compras     CompraProveedor[]
 }
 
 // Relación muchos a muchos explícita
@@ -52,13 +54,15 @@ model ProductoProveedor {
 }
 
 model Cliente {
-  id       Int     @id @default(autoincrement())
-  cedula   String  @unique
-  nombre   String
-  apellido String
-  telefono String
-  correo   String
-  ventas   Venta[]
+  id          Int       @id @default(autoincrement())
+  cedula      String    @unique
+  nombre      String
+  apellido    String
+  telefono    String
+  correo      String
+  activo      Boolean   @default(true)
+  eliminadoEn DateTime?
+  ventas      Venta[]
 }
 
 model Venta {
